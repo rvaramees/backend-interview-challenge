@@ -1,98 +1,37 @@
-# Backend Interview Challenge - Task Sync API
+# Offline Task Sync Backend By MOHAMMED RAMEES
 
-This is a backend developer interview challenge focused on building a sync-enabled task management API. The challenge evaluates understanding of REST APIs, data synchronization, offline-first architecture, and conflict resolution.
+This backend powers a personal productivity app designed for users in India, where internet connectivity can often be unstable.
+It ensures tasks can be created and managed offline, then synced automatically when a connection is available.
 
-## 📚 Documentation Overview
+## Features
 
-Please read these documents in order:
+- Offline-first: Create, update, and delete tasks without internet.
+- Sync Queue: All offline changes are added to a queue for later sync.
+- Batch Syncing: Changes are sent in batches when online.
+- Conflict Resolution: Handles conflicts between local and server tasks.
+- Multi-Device Access: Keep tasks consistent across devices.
+- Data Safety: Prevents data loss with retry mechanisms.
 
-1. **[📋 Submission Instructions](./docs/SUBMISSION_INSTRUCTIONS.md)** - How to submit your solution (MUST READ)
-2. **[📝 Requirements](./docs/REQUIREMENTS.md)** - Detailed challenge requirements and implementation tasks
-3. **[🔌 API Specification](./docs/API_SPEC.md)** - Complete API documentation with examples
-4. **[🤖 AI Usage Guidelines](./docs/AI_GUIDELINES.md)** - Guidelines for using AI tools during the challenge
 
-**⚠️ Important**: DO NOT create pull requests against this repository. All submissions must be through private forks.
 
-## Challenge Overview
+## Sync Flow
 
-Candidates are expected to implement a backend API that:
-- Manages tasks (CRUD operations)
-- Supports offline functionality with a sync queue
-- Handles conflict resolution when syncing
-- Provides robust error handling
+1. Add to Sync Queue  
+   When a user updates a task offline, it is added to the sync queue.
 
-## Project Structure
+2. Sync Service  
+   On reconnect, the service processes queued items in batches, sending them to the server, updating statuses, and resolving conflicts.
 
-```
-backend-interview-challenge/
-├── src/
-│   ├── db/             # Database setup and configuration
-│   ├── models/         # Data models (if needed)
-│   ├── services/       # Business logic (TO BE IMPLEMENTED)
-│   ├── routes/         # API endpoints (TO BE IMPLEMENTED)
-│   ├── middleware/     # Express middleware
-│   ├── types/          # TypeScript interfaces
-│   └── server.ts       # Express server setup
-├── tests/              # Test files
-├── docs/               # Documentation
-└── package.json        # Dependencies and scripts
-```
+## Conflict Handling
 
-## Getting Started
+A simple strategy: pick the most recently updated version between the local and server tasks.
 
-### Prerequisites
-- Node.js (v18 or higher)
-- npm or yarn
+## Development Notes
 
-### Setup
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Copy environment variables:
-   ```bash
-   cp .env.example .env
-   ```
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
+- Implement retry with exponential backoff  
+- Improve conflict resolution strategies  
+- Add tests for batch sync and edge cases  
+- Support partial batch failures  
+- Enhance logging and monitoring
 
-### Available Scripts
-
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build TypeScript to JavaScript
-- `npm run start` - Start production server
-- `npm test` - Run tests
-- `npm run test:ui` - Run tests with UI
-- `npm run lint` - Run ESLint
-- `npm run typecheck` - Check TypeScript types
-
-## Your Task
-
-### Key Implementation Files
-
-You'll need to implement the following services and routes:
-
-- `src/services/taskService.ts` - Task CRUD operations
-- `src/services/syncService.ts` - Sync logic and conflict resolution  
-- `src/routes/tasks.ts` - REST API endpoints
-- `src/routes/sync.ts` - Sync-related endpoints
-
-### Before Submission
-
-Ensure all of these pass:
-```bash
-npm test          # All tests must pass
-npm run lint      # No linting errors
-npm run typecheck # No TypeScript errors
-```
-
-### Time Expectation
-
-This challenge is designed to take 2-3 hours to complete.
-
-## License
-
-This project is for interview purposes only.
+This setup ensures users can stay productive anywhere — offline changes are never lost, and everything stays in sync across devices.
